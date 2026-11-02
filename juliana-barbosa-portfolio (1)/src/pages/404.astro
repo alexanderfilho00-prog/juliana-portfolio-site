@@ -1,0 +1,52 @@
+---
+import Base from '../layouts/Base.astro';
+import { projects, projectNumber } from '../data/projects';
+---
+
+<Base title="Página não encontrada" description="Este endereço não existe no portfólio de Juliana Barbosa." theme="dark" showContact={false}>
+  <section class="nf wrap" data-theme="dark" aria-labelledby="nf-h">
+    <div class="grid">
+      <p class="margin-col note micro muted"><span class="num">404</span> Erro</p>
+      <div class="body-col">
+        <h1 id="nf-h" class="nf-h">Esta página <span class="voice">não existe.</span></h1>
+        <p class="lead nf-lead">O endereço pode ter mudado ou ter sido digitado com erro. Os projetos continuam no índice.</p>
+        <p class="nf-actions">
+          <a class="micro nf-btn" href="/#trabalhos">Ir para o índice <span class="arrow" aria-hidden="true">→</span></a>
+          <a class="micro nf-btn" href="/">Página inicial</a>
+        </p>
+      </div>
+    </div>
+
+    <nav class="grid nf-list" aria-label="Projetos">
+      <p class="margin-col micro muted">Projetos</p>
+      <ul class="body-col">
+        {projects.map((p) => (
+          <li>
+            <a href={`/projetos/${p.slug}`}>
+              <span class="micro muted">{projectNumber(p)}</span>
+              <span>{p.title}</span>
+              <span class="voice muted">{p.brand}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  </section>
+</Base>
+
+<style>
+  .nf { padding-block: var(--s-5) var(--s-6); min-height: calc(100svh - 4.5rem); }
+  .nf .grid { row-gap: var(--s-2); }
+  .nf-h { font-family: var(--f-display); font-size: clamp(2.625rem, 1rem + 5.6vw, 7.5rem); line-height: 0.95; font-weight: 700; letter-spacing: var(--track-display); font-synthesis: none; max-width: 11ch; }
+  .nf-h .voice { font-weight: var(--w-regular); }
+  .nf-lead { margin-top: var(--s-3); max-width: 22em; }
+  .nf-actions { display: flex; flex-wrap: wrap; gap: var(--s-2); margin-top: var(--s-4); }
+  .nf-btn { padding: 0.75rem 1rem 0.7rem; border: var(--line) solid var(--fg); }
+  .nf-btn:first-child { background: var(--c-lime); color: var(--c-graphite); border-color: var(--c-lime); }
+  .nf-btn:hover { background: var(--fg); color: var(--c-graphite); border-color: var(--fg); }
+  .nf-list { margin-top: var(--s-6); }
+  .nf-list ul { border-top: var(--line) solid var(--rule); }
+  .nf-list li { border-bottom: var(--line) solid var(--rule); }
+  .nf-list a { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.3rem 1rem; padding-block: 0.8rem; }
+  .nf-list a:hover > span:nth-child(2) { color: var(--c-fuchsia); }
+</style>

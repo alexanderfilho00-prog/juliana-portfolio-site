@@ -1,0 +1,144 @@
+---
+/**
+ * Contêiner de mídia com proporção reservada.
+ * - Com `src`: renderiza <img> ou <video> dentro do mesmo quadro.
+ * - Sem `src`: mostra o contêiner provisório (cor sólida + identificação).
+ * O quadro é o que anima; a mídia real só preenche o espaço.
+ */
+import type { Media, Swatch } from '../../data/projects';
+import { hasSrc } from '../../data/projects';
+
+interface Props {
+  media: Media;
+  swatch: Swatch;
+  /** Identificação discreta do provisório (ex.: nome do projeto). */
+  label: string;
+  /** Quando a mídia repete informação já presente em texto (ex.: miniatura dentro de link). */
+  decorative?: boolean;
+  eager?: boolean;
+  vtName?: string;
+  class?: string;
+}
+
+const { media, swatch, label, decorative = false, eager = false, vtName, class: cls } = Astro.props;
+const ready = hasSrc(media);
+const ratio = media.ratio;
+const ratioM = media.ratioMobile ?? media.ratio;
+const fit = media.fit ?? 'cover';
+const pos = media.position ?? '50% 50%';
+const style = [
+  `--ratio:${ratio}`,
+  `--ratio-m:${ratioM}`,
+  `--fit:${fit}`,
+  `--pos:${pos}`,
+  vtName ? `view-transition-name:${vtName};view-transition-class:media` : "",
+]
+  .filter(Boolean)
+  .join(';');
+const alt = decorative ? '' : media.alt;
+const ratioLabel = ratio.replace('/', ':');
+---
+
+<div class:list={['frame', cls]} data-swatch={swatch} data-ready={ready ? 'true' : 'false'} style={style}>
+  {
+    ready && media.type === 'image' && (
+      <img src={media.src} alt={alt} loading={eager ? "eager" : "lazy"} decoding="async" />
+    )
+  }
+  {
+    ready && media.type === 'video' && (
+      <video
+        src={media.src}
+        poster={media.poster}
+        aria-label={alt || undefined}
+        aria-hidden={decorative ? 'true' : undefined}
+        playsinline
+        muted={media.ambient}
+        loop={media.ambient}
+        controls={!media.ambient}
+        preload="metadata"
+        data-ambient={media.ambient ? 'true' : undefined}
+      />
+    )
+  }
+  {
+    !ready && (
+      <div class="ph" aria-hidden="true">
+        <span class="ph-label">{label}</span>
+        <span class="ph-meta">
+          <span class="ph-status">Mídia a inserir</span>
+          <span>{ratioLabel}</span>
+        </span>
+      </div>
+    )
+  }
+</div>
+
+<style>
+  .frame {
+    position: relative;
+    aspect-ratio: var(--ratio-m);
+    overflow: hidden;
+    background: var(--swatch);
+    color: var(--swatch-ink);
+    contain: paint;
+    container-type: inline-size;
+  }
+
+  @media (min-width: 720px) {
+    .frame {
+      aspect-ratio: var(--ratio);
+    }
+  }
+
+  .frame[data-swatch='fuchsia'] {
+    --swatch: var(--c-fuchsia);
+    --swatch-ink: var(--c-graphite);
+  }
+
+  .frame[data-swatch='indigo'] {
+    --swatch: var(--c-indigo);
+    --swatch-ink: var(--c-paper);
+  }
+
+  .frame[data-swatch='lime'] {
+    --swatch: var(--c-lime);
+    --swatch-ink: var(--c-graphite);
+  }
+
+  .frame img,
+  .frame video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: var(--fit);
+    object-position: var(--pos);
+  }
+
+  .ph {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: clamp(0.6rem, 1.4vw, 1rem);
+    font-size: var(--fs-micro);
+    line-height: 1.3;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .ph-meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 1em;
+    opacity: 0.85;
+  }
+
+  @container (max-width: 180px) {
+    .ph-status {
+      display: none;
+    }
+  }
+</style>

@@ -1,0 +1,71 @@
+:root {
+  /* Paleta */
+  --c-fuchsia: #ff2e9a;
+  --c-indigo: #5d00ff;
+  --c-lime: #cfff04;
+  --c-graphite: #1c1c1c;
+  --c-paper: #f3efe7;
+  --c-paper-muted: #5e5a53; /* texto auxiliar sobre papel, 6:1 */
+  --c-graphite-muted: #a39e95; /* texto auxiliar sobre grafite, 6.4:1 */
+
+  /* Tipografia */
+  /* Uma família para toda a interface.
+     Provisório: o projeto não tem arquivos web licenciados de Helvetica Neue,
+     então a fonte vem do sistema do visitante (Helvetica Neue em Apple,
+     Arial no Windows, substituto do sistema no Linux). Para fidelidade entre
+     aparelhos, adicionar @font-face com os arquivos licenciados usando
+     exatamente o nome 'Helvetica Neue'. */
+  --f-sans: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --f-display: var(--f-sans);
+
+  /* Pesos reais da família (sem síntese) */
+  --w-regular: 400;
+  --w-medium: 500;
+  --w-bold: 700;
+
+  --track-display: -0.06em; /* títulos */
+  --track-large: -0.02em; /* listas e links em tamanho grande */
+  --track-text: 0.005em; /* texto corrido */
+
+  --fs-micro: 0.875rem;
+  --fs-small: 0.9375rem;
+  --fs-body: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+  --fs-lead: clamp(1.375rem, 1.05rem + 1.35vw, 2.25rem);
+  --fs-h2: clamp(2.375rem, 1.3rem + 4.1vw, 5.5rem);
+  --fs-index: clamp(1.625rem, 0.95rem + 2.75vw, 3.75rem);
+  --fs-display: clamp(5.5rem, 1rem + 20vw, 19rem);
+
+  --lh-tight: 0.86;
+  --lh-head: 0.95;
+  --lh-body: 1.55;
+  --measure: 34em;
+
+  /* Espaço */
+  --gutter: clamp(16px, 2.6vw, 40px);
+  --col-gap: clamp(12px, 1.4vw, 24px);
+  --s-1: 0.5rem;
+  --s-2: 1rem;
+  --s-3: 1.5rem;
+  --s-4: 2.5rem;
+  --s-5: clamp(3rem, 2rem + 4vw, 6rem);
+  --s-6: clamp(5rem, 3rem + 8vw, 11rem);
+  --line: 1px;
+
+  /* Movimento */
+  --ease-out: cubic-bezier(0.2, 0.7, 0.1, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-1: 180ms;
+  --dur-2: 320ms;
+  --dur-3: 560ms;
+  --rise: 18px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-1: 1ms;
+    --dur-2: 120ms;
+    --dur-3: 120ms;
+    --rise: 0px;
+  }
+}

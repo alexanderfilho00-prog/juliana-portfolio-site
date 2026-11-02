@@ -1,0 +1,347 @@
+---
+import { projects, projectNumber } from '../data/projects';
+import MediaFrame from './media/MediaFrame.astro';
+
+const first = projects[0];
+---
+
+<section id="trabalhos" class="index wrap" data-theme="dark" aria-labelledby="indice-h">
+  <div class="grid index-head">
+    <h2 id="indice-h" class="body-col h2" data-reveal="title">Trabalhos</h2>
+    <p class="margin-col index-note micro muted">
+      Seis projetos, de campanhas sazonais a conteúdo institucional.
+    </p>
+  </div>
+
+  <div class="grid index-grid">
+    <ol class="index-list" data-index>
+      {
+        projects.map((p, i) => (
+          <li class="row" data-slug={p.slug} data-reveal style={`--reveal-delay:${Math.min(i, 5) * 50}ms`}>
+            <a
+              class="row-link"
+              href={`/projetos/${p.slug}`}
+              data-row
+              data-slug={p.slug}
+              aria-label={`${p.title} — ${p.brand}. ${p.disciplines.join(', ')}`}
+            >
+              <span class="row-margin micro">
+                <span class="row-num">{projectNumber(p)}</span>
+                <span class="row-disc">{p.disciplines.join(' / ')}</span>
+              </span>
+              <span class="row-thumb">
+                <MediaFrame media={p.preview} swatch={p.swatch} label={p.brand} decorative />
+              </span>
+              <span class="row-text">
+                <span class="row-title">{p.title}</span>
+                <span class="row-brand voice">{p.brand}</span>
+              </span>
+            </a>
+          </li>
+        ))
+      }
+    </ol>
+
+    <!-- Prévia ancorada (desktop com ponteiro). Mostra sempre um projeto:
+         o primeiro em repouso, depois o último apontado ou focado. -->
+    <div class="preview" aria-hidden="true" data-preview>
+      <div class="preview-stage" data-reveal="frame" style="--reveal-delay:120ms">
+        {
+          projects.map((p) => (
+            <div class="preview-item" data-preview-item={p.slug} data-active={p.slug === first.slug ? '' : undefined}>
+              <MediaFrame media={p.preview} swatch={p.swatch} label={p.brand} decorative />
+            </div>
+          ))
+        }
+      </div>
+      <p class="preview-cap micro muted">
+        {
+          projects.map((p) => (
+            <span data-preview-cap={p.slug} data-active={p.slug === first.slug ? '' : undefined}>
+              {projectNumber(p)} {p.brand}
+            </span>
+          ))
+        }
+      </p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .index {
+    padding-block: var(--s-5) var(--s-6);
+  }
+
+  .index-head {
+    row-gap: var(--s-2);
+    align-items: end;
+    padding-bottom: var(--s-4);
+  }
+
+  .index-head .h2 {
+    grid-row: 1;
+  }
+
+  .index-note {
+    max-width: 22em;
+  }
+
+  @media (min-width: 900px) {
+    .index-note {
+      grid-row: 1;
+      padding-bottom: 0.6em;
+    }
+  }
+
+  .index-grid {
+    align-items: start;
+  }
+
+  .index-list {
+    grid-column: 1 / -1;
+    border-top: var(--line) solid var(--rule);
+  }
+
+  .row {
+    position: relative;
+    border-bottom: var(--line) solid var(--rule);
+  }
+
+  /* Fio que se desenha na linha ativa */
+  .row::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1px;
+    height: var(--line);
+    background: var(--fg);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform var(--dur-2) var(--ease-out);
+  }
+
+  /* ---------- Celular / tablet: prévia ao lado do título, um toque abre ---------- */
+  .row-link {
+    display: grid;
+    grid-template-columns: minmax(96px, 30%) 1fr;
+    grid-template-areas:
+      'thumb margin'
+      'thumb text';
+    grid-template-rows: auto 1fr;
+    column-gap: var(--s-2);
+    row-gap: 0.5rem;
+    padding-block: var(--s-2);
+    outline-offset: -2px;
+  }
+
+  .row-link:active .row-title {
+    color: var(--active);
+  }
+
+  .row-thumb {
+    grid-area: thumb;
+    display: block;
+  }
+
+  .row-margin {
+    grid-area: margin;
+    display: flex;
+    gap: 0.75em;
+    color: var(--muted);
+  }
+
+  .row-num {
+    color: var(--c-lime);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .row-text {
+    grid-area: text;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .row-title {
+    font-family: var(--f-display);
+    font-size: var(--fs-index);
+    line-height: 0.98;
+    font-weight: 700;
+    letter-spacing: var(--track-display);
+    font-synthesis: none;
+    text-wrap: balance;
+    hyphens: manual;
+  }
+
+  .row-brand {
+    font-size: clamp(1.125rem, 0.9rem + 0.8vw, 1.75rem);
+    line-height: 1.1;
+    color: var(--muted);
+  }
+
+  .preview {
+    display: none;
+  }
+
+  @media (min-width: 720px) {
+    .row-link {
+      grid-template-columns: minmax(0, 3fr) minmax(0, 2fr) minmax(0, 7fr);
+      grid-template-areas: 'margin thumb text';
+      grid-template-rows: auto;
+      column-gap: var(--col-gap);
+      align-items: start;
+    }
+
+    .row-margin {
+      flex-direction: column;
+      gap: 0.3rem;
+      padding-top: 0.4em;
+    }
+  }
+
+  /* ---------- Desktop com ponteiro: índice + prévia ancorada ---------- */
+  @media (min-width: 960px) and (hover: hover) and (pointer: fine) {
+    .index-list {
+      grid-column: 1 / span 8;
+      display: grid;
+      grid-template-columns: subgrid;
+    }
+
+    .row,
+    .row-link {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: subgrid;
+    }
+
+    .row-link {
+      grid-template-areas: none;
+      padding-block: 1.1rem 1rem;
+    }
+
+    .row-thumb {
+      display: none;
+    }
+
+    .row-margin {
+      grid-area: auto;
+      grid-column: 1 / span 3;
+      grid-row: 1;
+    }
+
+    .row-text {
+      grid-area: auto;
+      grid-column: 4 / -1;
+      grid-row: 1;
+      transition: transform var(--dur-1) var(--ease-out);
+    }
+
+    .row {
+      transition: opacity var(--dur-1) var(--ease-out);
+    }
+
+    .row-title {
+      transition: color var(--dur-1) var(--ease-out);
+    }
+
+    /* Estado ativo (hover ou foco, definido em JS) */
+    [data-has-active] .row:not([data-active]) {
+      opacity: 0.42;
+    }
+
+    .row[data-active] .row-text {
+      transform: translateX(12px);
+    }
+
+    .row[data-active] .row-title {
+      color: var(--active);
+    }
+
+    .row[data-active] .row-num {
+      color: var(--fg);
+    }
+
+    .row[data-active]::after {
+      transform: scaleX(1);
+    }
+
+    .preview {
+      display: block;
+      grid-column: 9 / -1;
+      position: sticky;
+      top: var(--s-4);
+      pointer-events: none;
+    }
+
+    .preview-stage {
+      position: relative;
+      aspect-ratio: 4 / 5;
+      overflow: hidden;
+      background: var(--c-graphite);
+    }
+
+    /* Troca por cortina: a nova prévia sobe por cima da anterior
+       (clip-path), com o conteúdo assentando de 1.06 para 1.
+       A anterior fica inteira por baixo até a nova cobrir tudo,
+       então nunca há quadro vazio, com ou sem imagem real. */
+    .preview-item {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      visibility: hidden;
+      clip-path: inset(100% 0 0 0);
+    }
+
+    .preview-item :global(.frame) {
+      height: 100%;
+      aspect-ratio: auto;
+    }
+
+    .preview-item :global(.frame > *) {
+      transform: scale(1.06);
+      transition: transform 600ms var(--ease-out);
+    }
+
+    .preview-item[data-prev] {
+      visibility: visible;
+      clip-path: inset(0);
+      z-index: 1;
+    }
+
+    .preview-item[data-active] {
+      visibility: visible;
+      clip-path: inset(0);
+      z-index: 2;
+      transition: clip-path 420ms var(--ease-out);
+    }
+
+    .preview-item[data-active] :global(.frame > *) {
+      transform: none;
+    }
+
+    .preview-cap {
+      position: relative;
+      margin-top: 0.75rem;
+      height: 1.4em;
+    }
+
+    .preview-cap span {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity var(--dur-1) var(--ease-out);
+    }
+
+    .preview-cap span[data-active] {
+      opacity: 1;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .preview-item[data-active],
+    .preview-item :global(.frame > *) {
+      transition: none;
+    }
+  }
+</style>

@@ -1,0 +1,297 @@
+---
+import Base from '../layouts/Base.astro';
+import { profile } from '../data/profile';
+---
+
+<Base
+  title="Sobre"
+  description="Juliana Barbosa: formação em Publicidade e Propaganda pela ESPM-Rio, prática em conteúdo, copy, canais, campanhas e performance, e direcionamento para Brand e Creative Strategy."
+  theme="paper"
+  current="sobre"
+>
+  <article class="about" data-theme="paper" aria-labelledby="about-h">
+    <header class="wrap grid about-head">
+      <div class="body-col">
+        <h1 id="about-h" class="about-h">
+          Do conteúdo de todo dia <span class="voice">à construção de marca.</span>
+        </h1>
+      </div>
+    </header>
+
+    <div class="wrap grid about-intro" data-reveal>
+      <div class="body-col prose intro-text">
+        <p class="lead">
+          Sou Juliana Barbosa, publicitária formada pela ESPM-Rio.
+        </p>
+        <p>
+          Trabalho no dia a dia das marcas: estratégia de conteúdo, copy, gestão de canais, campanhas e análise de
+          performance. Trabalhei com marcas de segmentos bem diferentes — moda, gastronomia, esporte e
+          lazer, cada uma com seu próprio jeito de falar.
+        </p>
+        <p>
+          Agora direciono esse repertório para Brand Strategy e Creative Strategy. Me interessa o que vem antes da
+          peça: posicionamento, construção de marca e os universos estéticos e culturais em que ela circula.
+        </p>
+      </div>
+    </div>
+
+    <section class="wrap about-sec" aria-labelledby="direcao-h" data-reveal>
+      <div class="grid">
+        <h2 id="direcao-h" class="margin-col micro muted">Direcionamento</h2>
+        <div class="body-col">
+          <p class="direction">
+            {
+              profile.direction.map((d, i) => (
+                <>
+                  <span class={i === 0 ? 'marker' : undefined}>{d}</span>
+                  {i < profile.direction.length - 1 && <span class="voice amp"> &amp; </span>}
+                </>
+              ))
+            }
+          </p>
+          <ul class="interests">
+            {profile.interests.map((it) => <li>{it}</li>)}
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="wrap about-sec" aria-labelledby="pratica-h" data-reveal>
+      <div class="grid">
+        <h2 id="pratica-h" class="margin-col micro muted">Prática</h2>
+        <ul class="body-col practice">
+          {
+            profile.practice.map((p) => (
+              <li>
+                <span class="practice-name">{p}</span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </section>
+
+    <section class="wrap about-sec" aria-labelledby="formacao-h" data-reveal>
+      <div class="grid">
+        <h2 id="formacao-h" class="margin-col micro muted">Formação</h2>
+        <p class="body-col formation">
+          Publicidade e Propaganda <span class="voice nowrap">— ESPM-Rio</span>
+        </p>
+      </div>
+    </section>
+
+    <section class="wrap about-sec" aria-labelledby="ferramentas-h" data-reveal>
+      <div class="grid">
+        <h2 id="ferramentas-h" class="margin-col micro muted">Ferramentas</h2>
+        <dl class="body-col tools">
+          {
+            profile.tools.map((t) => (
+              <div class="tool">
+                <dt>{t.name}</dt>
+                <dd class="muted">{t.use}</dd>
+              </div>
+            ))
+          }
+        </dl>
+      </div>
+    </section>
+
+    <section class="wrap about-sec" aria-labelledby="marcas-h" data-reveal>
+      <div class="grid">
+        <h2 id="marcas-h" class="margin-col micro muted">Marcas com que trabalhei</h2>
+        <ul class="body-col brands">
+          {profile.brands.map((b) => <li>{b}</li>)}
+        </ul>
+      </div>
+    </section>
+
+    <div class="wrap grid about-back">
+      <a class="body-col micro back-link" href="/#trabalhos">
+        <span class="arrow arrow--back" aria-hidden="true">←</span> Ver trabalhos
+      </a>
+    </div>
+  </article>
+</Base>
+
+<style>
+  .about {
+    padding-bottom: var(--s-6);
+  }
+
+  .about-head {
+    padding-block: var(--s-5) var(--s-5);
+    row-gap: var(--s-3);
+  }
+
+  .about-h {
+    font-family: var(--f-display);
+    font-size: clamp(2.625rem, 1rem + 5.6vw, 7.5rem);
+    line-height: 0.95;
+    font-weight: 700;
+    letter-spacing: var(--track-display);
+    font-synthesis: none;
+    max-width: 12ch;
+    text-wrap: balance;
+  }
+
+  .about-h .voice {
+    font-weight: var(--w-regular);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .about-h {
+      animation: about-up var(--dur-3) var(--ease-out) both;
+    }
+  }
+
+  @keyframes about-up {
+    from {
+      opacity: 0;
+      transform: translateY(var(--rise));
+    }
+  }
+
+  .about-intro {
+    padding-bottom: var(--s-5);
+  }
+
+  @media (min-width: 900px) {
+    .intro-text {
+      grid-column: 4 / span 6;
+    }
+  }
+
+  .intro-text .lead {
+    margin-bottom: 1em;
+  }
+
+  .about-sec {
+    padding-block: var(--s-3) var(--s-4);
+  }
+
+  .about-sec > .grid {
+    border-top: var(--line) solid var(--rule);
+    padding-top: var(--s-3);
+    row-gap: var(--s-2);
+  }
+
+  .about-sec h2 {
+    font-size: var(--fs-micro);
+    font-weight: 500;
+  }
+
+  .direction {
+    font-family: var(--f-display);
+    font-size: var(--fs-h2);
+    line-height: 0.98;
+    font-weight: var(--w-bold);
+    letter-spacing: var(--track-display);
+  }
+
+  .direction .amp {
+    font-weight: var(--w-regular);
+  }
+
+  .direction > span:not(.amp) {
+    white-space: nowrap;
+  }
+
+  .interests {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1.5rem;
+    margin-top: var(--s-3);
+    font-size: var(--fs-small);
+  }
+
+  .interests li::before {
+    content: '/ ';
+    color: var(--muted);
+  }
+
+  .practice li {
+    display: flex;
+    align-items: baseline;
+    gap: var(--s-2);
+    padding-block: 0.5rem 0.35rem;
+    border-bottom: var(--line) solid var(--rule);
+  }
+
+  .practice li:first-child {
+    padding-top: 0;
+  }
+
+  .practice-name {
+    font-size: clamp(1.75rem, 1.1rem + 2.6vw, 3.5rem);
+    line-height: 1;
+    font-weight: var(--w-medium);
+    letter-spacing: var(--track-large);
+  }
+
+  .nowrap {
+    white-space: nowrap;
+  }
+
+  .formation {
+    font-size: var(--fs-lead);
+    line-height: 1.2;
+  }
+
+  .tools {
+    display: grid;
+    grid-template-columns: 1fr;
+    column-gap: var(--col-gap);
+  }
+
+  @media (min-width: 720px) {
+    .tools {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .tool {
+    display: flex;
+    flex-direction: column;
+    padding-block: 0.6rem;
+    border-bottom: var(--line) solid var(--rule);
+  }
+
+  .tool dt {
+    font-weight: var(--w-medium);
+  }
+
+  .tool dd {
+    font-size: var(--fs-small);
+  }
+
+  .brands {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.1em 0;
+    font-size: clamp(1.375rem, 1rem + 1.6vw, 2.5rem);
+    line-height: 1.2;
+    font-weight: var(--w-medium);
+    letter-spacing: var(--track-large);
+  }
+
+  .brands li:not(:last-child)::after {
+    content: '/';
+    margin-inline: 0.35em;
+    color: var(--muted);
+    font-weight: var(--w-regular);
+  }
+
+  .about-back {
+    margin-top: var(--s-4);
+  }
+
+  .back-link {
+    justify-self: start;
+    padding-block: 0.6rem;
+  }
+
+  .back-link:hover {
+    text-decoration: underline;
+    text-underline-offset: 0.25em;
+  }
+</style>

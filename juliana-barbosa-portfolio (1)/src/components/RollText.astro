@@ -1,0 +1,34 @@
+---
+/**
+ * Texto cujas letras "rolam" verticalmente dentro da própria máscara:
+ * a letra sai por cima enquanto uma cópia idêntica entra por baixo,
+ * em onda da esquerda para a direita (índice --i por letra).
+ * Sem animação ativa, mostra o texto normal. Uso decorativo: o texto
+ * completo fica no aria-label do contêiner que o usa ou em outro ponto da página.
+ */
+interface Props {
+  text: string;
+  class?: string;
+  /** Uma palavra por linha (ex.: nome empilhado no celular). */
+  wordClass?: string;
+}
+const { text, class: cls, wordClass = 'roll-word' } = Astro.props;
+let i = 0;
+const words = text.split(' ').map((w) => [...w].map((ch) => ({ ch, i: i++ })));
+---
+
+<span class:list={['roll', cls]} aria-hidden="true">
+  {
+    words.map((letters) => (
+      <span class={wordClass}>
+        {letters.map(({ ch, i }) => (
+          <span class="ch" style={`--i:${i}`}>
+            <span class="ch-in" data-ch={ch}>
+              {ch}
+            </span>
+          </span>
+        ))}
+      </span>
+    ))
+  }
+</span>
