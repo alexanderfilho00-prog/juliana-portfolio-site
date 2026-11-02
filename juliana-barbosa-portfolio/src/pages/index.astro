@@ -1,0 +1,291 @@
+---
+import Base from '../layouts/Base.astro';
+import ProjectIndex from '../components/ProjectIndex.astro';
+import { profile } from '../data/profile';
+---
+
+<Base
+  title="Juliana Barbosa"
+  description="Portfólio de Juliana Barbosa, publicitária formada pela ESPM-Rio. Conteúdo, copy, canais e campanhas, com direcionamento para Brand Strategy e Creative Strategy."
+  theme="dark"
+  current="home"
+>
+  <section class="hero wrap" data-theme="dark" aria-labelledby="hero-h">
+    <h1 id="hero-h" class="hero-name">
+      <span class="line line--1"><span class="line-in">Juliana</span></span>
+      <span class="line line--2"><span class="line-in">Barbosa</span></span>
+    </h1>
+
+    <div class="grid hero-foot">
+      <p class="margin-col hero-note micro muted">Publicidade e Propaganda, ESPM-Rio</p>
+      <div class="body-col hero-body">
+        <p class="lead hero-lead">
+          Da rotina das marcas — conteúdo, copy, canais e campanhas — para a pergunta que vem antes:
+          <span class="marker">o que uma marca é</span> e em que universo ela vive.
+        </p>
+        <p class="hero-focus">
+          <span class="micro muted">Direcionamento</span>
+          <span class="serif">Brand Strategy &amp; Creative Strategy</span>
+        </p>
+        <a class="hero-cta" href="#trabalhos">
+          Ver trabalhos <span class="arrow arrow--down" aria-hidden="true">↓</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <ProjectIndex />
+
+  <section class="about-teaser wrap" data-theme="paper" aria-labelledby="sobre-h">
+    <div class="grid" data-reveal>
+      <h2 id="sobre-h" class="body-col h2 about-h">Repertório de rotina, olhar de marca.</h2>
+    </div>
+
+    <div class="grid about-cols" data-reveal style="--reveal-delay:80ms">
+      <div class="about-text prose">
+        <p>
+          Sou formada em Publicidade e Propaganda pela ESPM-Rio. Minha experiência está no dia a dia das marcas:
+          planejar conteúdo, escrever, cuidar de canais, montar campanhas e ler o que os números dizem depois.
+        </p>
+        <p>
+          Esse repertório hoje aponta para estratégia de marca e estratégia criativa — posicionamento, construção
+          de marca e os universos estéticos e culturais que tornam uma marca reconhecível.
+        </p>
+        <a class="about-link" href="/sobre">
+          <span class="link">Formação, prática e ferramentas</span>&nbsp;<span class="arrow" aria-hidden="true">→</span>
+        </a>
+      </div>
+      <ul class="about-practice" aria-label="Prática">
+        {profile.practice.map((item) => <li>{item}</li>)}
+      </ul>
+    </div>
+  </section>
+</Base>
+
+<style>
+  /* ---------- Abertura ----------
+     O nome é a peça: uma linha de margem a margem no desktop,
+     duas linhas em contraponto (esquerda / direita) no celular.
+     Tamanho calculado pela largura do contêiner (medida real da fonte). */
+  .hero {
+    container-type: inline-size;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(2.5rem, 1.5rem + 4vw, 5rem);
+    padding-block: clamp(1rem, 4vh, 3rem) var(--s-5);
+  }
+
+  /* Divisores medidos com a fonte de títulos (+6% de folga para a
+     Helvetica Neue, um pouco mais larga que o Arial). */
+  .hero-name {
+    display: flex;
+    flex-direction: column;
+    font-family: var(--f-display);
+    font-size: calc(100cqi / 3.85);
+    line-height: 0.88;
+    font-weight: 700;
+    letter-spacing: var(--track-display);
+    font-synthesis: none;
+  }
+
+  .line--2 {
+    align-self: flex-end;
+  }
+
+  @media (min-width: 720px) {
+    .hero-name {
+      flex-direction: row;
+      gap: 0.24em;
+      font-size: calc(100cqi / 7.35);
+    }
+
+    .line--2 {
+      align-self: auto;
+    }
+  }
+
+  /* A máscara deixa folga para ascendentes e descendentes */
+  .line {
+    display: block;
+    overflow: hidden;
+    padding-block: 0.04em 0.1em;
+    margin-block: -0.04em -0.1em;
+  }
+
+  .line-in {
+    display: inline-block;
+  }
+
+  .hero-foot {
+    row-gap: var(--s-3);
+    align-items: start;
+    padding-top: var(--s-3);
+    border-top: var(--line) solid var(--rule);
+  }
+
+  .hero-body {
+    display: grid;
+    gap: var(--s-3);
+  }
+
+  .hero-lead {
+    max-width: 24em;
+  }
+
+  .hero-focus {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.4rem 1rem;
+  }
+
+  .hero-focus .serif {
+    font-size: clamp(1.25rem, 1rem + 1vw, 2rem);
+    line-height: 1.1;
+  }
+
+  .hero-cta {
+    justify-self: start;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5em;
+    min-height: 44px;
+    padding: 0.55rem 1.1rem 0.5rem;
+    background: var(--c-lime);
+    color: var(--c-graphite);
+    font-weight: 600;
+    transition: background-color var(--dur-1) var(--ease-out), color var(--dur-1) var(--ease-out);
+  }
+
+  .hero-cta:hover {
+    background: var(--c-paper);
+  }
+
+  .hero-cta:active {
+    transform: translateY(1px);
+  }
+
+  @media (min-width: 900px) {
+    .hero-body {
+      grid-template-columns: minmax(0, 6fr) minmax(0, 3fr);
+      column-gap: var(--col-gap);
+      align-items: end;
+    }
+
+    .hero-lead {
+      grid-column: 1 / -1;
+    }
+
+    .hero-focus {
+      grid-column: 1;
+    }
+
+    .hero-cta {
+      grid-column: 2;
+      justify-self: end;
+    }
+  }
+
+  /* Entrada: linhas sobem da máscara; marca-texto se estende depois.
+     Sem JS ou sem animação, tudo já está no estado final. */
+  @media (prefers-reduced-motion: no-preference) {
+    .line-in {
+      animation: rise var(--dur-3) var(--ease-out) both;
+    }
+
+    .line--2 .line-in {
+      animation-delay: 110ms;
+    }
+
+    .hero-foot {
+      animation: fade-up 640ms var(--ease-out) 260ms both;
+    }
+
+    .hero .marker {
+      animation: marker-ink 1ms linear 760ms both;
+    }
+
+    .hero .marker::before {
+      animation: marker-draw 520ms var(--ease-out) 700ms both;
+    }
+  }
+
+  @keyframes rise {
+    from {
+      transform: translateY(105%);
+    }
+  }
+
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(var(--rise));
+    }
+  }
+
+  @keyframes marker-draw {
+    from {
+      transform: scaleX(0);
+    }
+  }
+
+  @keyframes marker-ink {
+    from {
+      color: var(--c-paper);
+    }
+  }
+
+  /* ---------- Sobre (recorte) ---------- */
+  .about-teaser {
+    padding-block: var(--s-6);
+  }
+
+  .about-h {
+    max-width: 13ch;
+  }
+
+  .about-cols {
+    margin-top: var(--s-5);
+    row-gap: var(--s-4);
+    align-items: start;
+  }
+
+  .about-text {
+    grid-column: 1 / -1;
+  }
+
+  .about-link {
+    display: inline-block;
+    margin-top: var(--s-4);
+    font-size: var(--fs-lead);
+    line-height: 1.2;
+  }
+
+  .about-practice {
+    grid-column: 1 / -1;
+  }
+
+  .about-practice li {
+    padding-block: 0.45rem 0.35rem;
+    border-bottom: var(--line) solid var(--rule);
+    font-size: clamp(1.5rem, 1.1rem + 1.3vw, 2.25rem);
+    line-height: 1.05;
+    font-weight: 600;
+    font-stretch: 75%;
+    letter-spacing: -0.012em;
+  }
+
+  .about-practice li:first-child {
+    border-top: var(--line) solid var(--rule);
+  }
+
+  @media (min-width: 900px) {
+    .about-text {
+      grid-column: 4 / span 5;
+    }
+
+    .about-practice {
+      grid-column: 9 / -1;
+    }
+  }
+</style>

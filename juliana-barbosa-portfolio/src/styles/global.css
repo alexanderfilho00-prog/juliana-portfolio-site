@@ -1,0 +1,373 @@
+@import '@fontsource-variable/bricolage-grotesque/standard.css';
+@import '@fontsource/instrument-serif/latin-400-italic.css';
+@import './tokens.css';
+
+/* ---------- Base ---------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  background: var(--c-graphite);
+  scroll-padding-top: var(--s-3);
+  scrollbar-color: var(--c-graphite-muted) var(--c-graphite);
+  accent-color: var(--c-lime);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+body {
+  margin: 0;
+  font-family: var(--f-sans);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  font-weight: 400;
+  font-stretch: 100%;
+  font-kerning: normal;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  background: var(--bg);
+  color: var(--fg);
+  overflow-x: clip;
+}
+
+h1,
+h2,
+h3,
+h4,
+p,
+ul,
+ol,
+dl,
+dd,
+figure {
+  margin: 0;
+}
+
+ul,
+ol {
+  padding: 0;
+  list-style: none;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img,
+video {
+  display: block;
+  max-width: 100%;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+::selection {
+  background: var(--c-lime);
+  color: var(--c-graphite);
+}
+
+/* ---------- Temas por superfície ---------- */
+body,
+[data-theme='dark'] {
+  --bg: var(--c-graphite);
+  --fg: var(--c-paper);
+  --muted: var(--c-graphite-muted);
+  --rule: rgb(243 239 231 / 0.22);
+  --focus: var(--c-lime);
+  --active: var(--c-fuchsia);
+}
+
+[data-theme='paper'] {
+  --bg: var(--c-paper);
+  --fg: var(--c-graphite);
+  --muted: var(--c-paper-muted);
+  --rule: rgb(28 28 28 / 0.2);
+  --focus: var(--c-indigo);
+  --active: var(--c-graphite);
+}
+
+[data-theme='indigo'] {
+  --bg: var(--c-indigo);
+  --fg: var(--c-paper);
+  --muted: #e6e0ee; /* 5,9:1 sobre índigo */
+  --rule: rgb(243 239 231 / 0.34);
+  --focus: var(--c-lime);
+  --active: var(--c-lime);
+}
+
+[data-theme] {
+  background: var(--bg);
+  color: var(--fg);
+}
+
+/* ---------- Foco ---------- */
+:focus {
+  outline: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 4px;
+  border-radius: 1px;
+}
+
+.skip-link {
+  position: absolute;
+  left: var(--gutter);
+  top: 0;
+  z-index: 100;
+  padding: 0.6rem 0.9rem;
+  background: var(--c-lime);
+  color: var(--c-graphite);
+  font-size: var(--fs-small);
+  font-weight: 600;
+  transform: translateY(-120%);
+}
+
+.skip-link:focus-visible {
+  transform: none;
+  outline-color: var(--c-graphite);
+  outline-offset: -4px;
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* ---------- Grid ---------- */
+.wrap {
+  padding-inline: var(--gutter);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--col-gap);
+}
+
+/* Coluna de margem (anotações) e corpo */
+.margin-col {
+  grid-column: 1 / -1;
+}
+
+.body-col {
+  grid-column: 1 / -1;
+}
+
+@media (min-width: 900px) {
+  .margin-col {
+    grid-column: 1 / span 3;
+  }
+
+  .body-col {
+    grid-column: 4 / -1;
+  }
+}
+
+/* ---------- Tipografia utilitária ---------- */
+.micro {
+  font-size: var(--fs-micro);
+  line-height: 1.35;
+  letter-spacing: 0.005em;
+  font-weight: 500;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.serif {
+  font-family: var(--f-serif);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+/* Papel tipográfico dos títulos: uma família, Bold, tracking -60.
+   Sem síntese: pesos ou itálicos ausentes não são simulados. */
+.display,
+.h2 {
+  font-family: var(--f-display);
+  font-weight: 700;
+  font-stretch: normal;
+  letter-spacing: var(--track-display);
+  font-synthesis: none;
+  font-kerning: normal;
+  hyphens: manual;
+}
+
+/* Ênfase em serifa dentro de um título mantém a própria família e espaçamento */
+.display .serif,
+.h2 .serif {
+  font-family: var(--f-serif);
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+
+.display {
+  font-size: var(--fs-display);
+  line-height: var(--lh-tight);
+}
+
+.h2 {
+  font-size: var(--fs-h2);
+  line-height: 0.98;
+  text-wrap: balance;
+}
+
+.lead {
+  font-size: var(--fs-lead);
+  line-height: 1.22;
+  font-weight: 400;
+  letter-spacing: -0.012em;
+  text-wrap: pretty;
+}
+
+.prose {
+  max-width: var(--measure);
+  text-wrap: pretty;
+}
+
+.prose p + p {
+  margin-top: 1em;
+}
+
+.rule-top {
+  border-top: var(--line) solid var(--rule);
+}
+
+/* Nota de margem: número + rótulo */
+.note {
+  display: flex;
+  gap: 0.75em;
+  align-items: baseline;
+}
+
+.note .num {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Marca-texto ---------- */
+.marker {
+  position: relative;
+  z-index: 0;
+  color: var(--c-graphite);
+  white-space: nowrap;
+  padding-inline: 0.08em;
+  margin-inline: -0.08em;
+}
+
+.marker::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: 0.08em 0 0.02em;
+  background: var(--c-lime);
+  transform-origin: left center;
+}
+
+/* Link com sublinhado que se desenha */
+.link {
+  background: linear-gradient(currentColor, currentColor) 0 100% / 100% var(--line) no-repeat;
+  transition: background-size var(--dur-2) var(--ease-out);
+}
+
+.link:hover {
+  background-size: 0% var(--line);
+  background-position: 100% 100%;
+}
+
+.arrow {
+  display: inline-block;
+  transition: transform var(--dur-1) var(--ease-out);
+}
+
+a:hover .arrow,
+a:focus-visible .arrow {
+  transform: translateX(0.2em);
+}
+
+a:hover .arrow--down,
+a:focus-visible .arrow--down {
+  transform: translateY(0.15em);
+}
+
+a:hover .arrow--back,
+a:focus-visible .arrow--back {
+  transform: translateX(-0.2em);
+}
+
+/* ---------- Revelação de seções ----------
+   Só esconde quando o JS está ativo; se o observer falhar,
+   uma rede de segurança em main.ts revela tudo. */
+.js [data-reveal] {
+  opacity: 0;
+  transform: translateY(var(--rise));
+  transition:
+    opacity var(--dur-3) var(--ease-out),
+    transform var(--dur-3) var(--ease-out);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+.js [data-reveal].is-in {
+  opacity: 1;
+  transform: none;
+}
+
+/* ---------- Transições de página (View Transitions) ----------
+   A raiz é animada via ClientRouter (Base.astro). Aqui: o quadro de mídia
+   que viaja da prévia para a capa. */
+::view-transition-group(*.media) {
+  animation-duration: 480ms;
+  animation-timing-function: cubic-bezier(0.2, 0.7, 0.1, 1);
+}
+
+::view-transition-image-pair(*.media) {
+  overflow: hidden;
+}
+
+::view-transition-old(*.media),
+::view-transition-new(*.media) {
+  height: 100%;
+  object-fit: cover;
+}
+
+@keyframes vt-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes vt-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+
+#conteudo:focus {
+  outline: none;
+}

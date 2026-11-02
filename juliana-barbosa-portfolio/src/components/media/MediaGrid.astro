@@ -1,0 +1,25 @@
+---
+import type { Media, Swatch } from '../../data/projects';
+import { hasSrc } from '../../data/projects';
+import MediaFrame from './MediaFrame.astro';
+interface Props { media: Media[]; swatch: Swatch; label: string; }
+const { media, swatch, label } = Astro.props;
+const items = media.filter(hasSrc);
+---
+{items.length > 0 && (
+  <ul class="m-grid" role="list">
+    {items.map((m, i) => (
+      <li data-reveal style={`--reveal-delay:${(i % 3) * 60}ms`}>
+        <figure>
+          <MediaFrame media={m} swatch={swatch} label={label} />
+          {m.caption && <figcaption class="micro muted">{m.caption}</figcaption>}
+        </figure>
+      </li>
+    ))}
+  </ul>
+)}
+<style>
+  .m-grid { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--col-gap); row-gap: var(--s-3); align-items: start; }
+  @media (min-width: 900px) { .m-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  figcaption { margin-top: 0.6rem; }
+</style>

@@ -1,0 +1,28 @@
+---
+/** Renderiza os módulos de galeria prontos. Sem módulos prontos, não renderiza nada. */
+import type { GalleryModule, Swatch } from '../../data/projects';
+import { isModuleReady } from '../../data/projects';
+import MediaSingle from './MediaSingle.astro';
+import MediaPair from './MediaPair.astro';
+import MediaVideo from './MediaVideo.astro';
+import MediaGrid from './MediaGrid.astro';
+
+interface Props { modules?: GalleryModule[]; swatch: Swatch; label: string; }
+const { modules = [], swatch, label } = Astro.props;
+const ready = modules.filter(isModuleReady);
+---
+{ready.length > 0 && (
+  <section class="gallery wrap" aria-label={`Galeria — ${label}`}>
+    {ready.map((mod) => (
+      <div class="grid gallery-row">
+        {mod.kind === 'single' && <MediaSingle media={mod.media} swatch={swatch} label={label} />}
+        {mod.kind === 'pair' && <MediaPair media={mod.media} swatch={swatch} label={label} />}
+        {mod.kind === 'video' && <MediaVideo media={mod.media} swatch={swatch} label={label} />}
+        {mod.kind === 'grid' && <MediaGrid media={mod.media} swatch={swatch} label={label} />}
+      </div>
+    ))}
+  </section>
+)}
+<style>
+  .gallery { padding-block: var(--s-5) 0; display: grid; row-gap: var(--s-5); }
+</style>

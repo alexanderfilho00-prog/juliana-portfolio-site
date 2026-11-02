@@ -1,0 +1,64 @@
+---
+import { ClientRouter } from 'astro:transitions';
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Contact from '../components/Contact.astro';
+
+type Theme = 'dark' | 'paper' | 'indigo';
+
+interface Props {
+  title: string;
+  description: string;
+  /** Tema da primeira superfície (cabeçalho). */
+  theme?: Theme;
+  current?: 'home' | 'sobre' | 'projeto' | 'none';
+  showContact?: boolean;
+}
+
+const { title, description, theme = 'dark', current = 'none', showContact = true } = Astro.props;
+const fullTitle = title === 'Juliana Barbosa' ? title : `${title} — Juliana Barbosa`;
+
+/* Transição de página: saída curta, entrada com leve subida.
+   O ClientRouter desliga as animações sozinho com movimento reduzido. */
+const pageAnim = {
+  forwards: {
+    old: { name: 'vt-out', duration: '200ms', easing: 'cubic-bezier(0.65, 0, 0.35, 1)', fillMode: 'both' },
+    new: { name: 'vt-in', duration: '480ms', easing: 'cubic-bezier(0.2, 0.7, 0.1, 1)', delay: '80ms', fillMode: 'both' },
+  },
+  backwards: {
+    old: { name: 'vt-out', duration: '200ms', easing: 'cubic-bezier(0.65, 0, 0.35, 1)', fillMode: 'both' },
+    new: { name: 'vt-in', duration: '480ms', easing: 'cubic-bezier(0.2, 0.7, 0.1, 1)', delay: '80ms', fillMode: 'both' },
+  },
+};
+---
+
+<!doctype html>
+<html lang="pt-BR" transition:animate={pageAnim}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#1c1c1c" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="pt_BR" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <script is:inline>
+      document.documentElement.classList.add('js');
+    </script>
+    <ClientRouter fallback="none" />
+  </head>
+  <body data-theme={theme} data-page={current}>
+    <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+    <Header current={current} theme={theme} />
+    <main id="conteudo" tabindex="-1">
+      <slot />
+    </main>
+    {showContact && <Contact />}
+    <script>
+      import '../scripts/main.ts';
+    </script>
+  </body>
+</html>

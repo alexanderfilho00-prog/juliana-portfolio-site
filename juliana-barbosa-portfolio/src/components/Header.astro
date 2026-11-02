@@ -1,0 +1,268 @@
+---
+import { profile } from '../data/profile';
+
+interface Props {
+  current: 'home' | 'sobre' | 'projeto' | 'none';
+  theme: 'dark' | 'paper' | 'indigo';
+}
+const { current, theme } = Astro.props;
+
+const links = [
+  { href: '/#trabalhos', label: 'Trabalhos', active: current === 'projeto' },
+  { href: '/sobre', label: 'Sobre', active: current === 'sobre' },
+  { href: '#contato', label: 'Contato', active: false },
+];
+---
+
+<header class="site-header wrap grid" data-theme={theme}>
+  <a class="brand" href="/" aria-label="Juliana Barbosa, página inicial" aria-current={current === 'home' ? 'page' : undefined}>
+    {profile.name}
+  </a>
+
+  <nav class="nav" aria-label="Principal">
+    <ul>
+      {
+        links.map((l) => (
+          <li>
+            <a href={l.href} class="nav-link" aria-current={l.active ? (current === 'sobre' ? 'page' : 'true') : undefined}>
+              {l.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+
+  <button class="menu-btn" type="button" aria-haspopup="dialog" aria-controls="menu" aria-expanded="false" data-menu-open>
+    Menu
+  </button>
+
+  <dialog id="menu" class="menu" aria-label="Menu" data-theme="dark" data-menu>
+    <div class="menu-inner wrap">
+      <div class="menu-top">
+        <span class="brand" aria-hidden="true">{profile.name}</span>
+        <button type="button" class="menu-close" data-menu-close>Fechar</button>
+      </div>
+      <nav aria-label="Menu principal">
+        <ol class="menu-list">
+          {
+            links.map((l, i) => (
+              <li style={`--i:${i}`}>
+                <a href={l.href} data-menu-link aria-current={l.active ? (current === 'sobre' ? 'page' : 'true') : undefined}>
+                  <span class="menu-label">{l.label}</span>
+                </a>
+              </li>
+            ))
+          }
+        </ol>
+      </nav>
+      <div class="menu-foot micro">
+        <a href={`mailto:${profile.contact.email}`} class="muted-link">{profile.contact.email}</a>
+        <a href={profile.contact.linkedin.href} class="muted-link" rel="noopener" target="_blank">LinkedIn<span class="visually-hidden"> (abre em nova aba)</span></a>
+      </div>
+    </div>
+  </dialog>
+</header>
+
+<style>
+  .site-header {
+    align-items: baseline;
+    padding-block: var(--s-3) var(--s-2);
+    font-size: var(--fs-small);
+    position: relative;
+    z-index: 5;
+  }
+
+  .brand {
+    grid-column: 1 / span 6;
+    font-weight: 600;
+    letter-spacing: -0.005em;
+  }
+
+
+  .nav {
+    display: none;
+  }
+
+  .menu-btn {
+    grid-column: 7 / -1;
+    justify-self: end;
+    font-weight: 500;
+    padding: 0.5rem 0;
+    min-height: 44px;
+    min-width: 44px;
+    text-align: right;
+  }
+
+  @media (min-width: 900px) {
+    .brand {
+      grid-column: 1 / span 4;
+    }
+
+
+    .nav {
+      display: block;
+      grid-column: 8 / -1;
+      justify-self: end;
+    }
+
+    .nav ul {
+      display: flex;
+      gap: clamp(1.25rem, 2.4vw, 2.5rem);
+    }
+
+    .menu-btn {
+      display: none;
+    }
+  }
+
+  .nav-link {
+    position: relative;
+    padding-block: 0.25rem;
+  }
+
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: var(--line);
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform var(--dur-2) var(--ease-out);
+  }
+
+  .nav-link:hover::after,
+  .nav-link[aria-current]::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+
+  /* ---------- Menu mobile ---------- */
+  .menu {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    max-width: none;
+    height: 100%;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: var(--c-graphite);
+    color: var(--c-paper);
+    overscroll-behavior: contain;
+  }
+
+  .menu::backdrop {
+    background: transparent;
+  }
+
+  .menu-inner {
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding-block: var(--s-3) var(--s-4);
+  }
+
+  .menu-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-size: var(--fs-small);
+  }
+
+  .menu-close {
+    font-weight: 500;
+    min-height: 44px;
+    min-width: 44px;
+    text-align: right;
+  }
+
+  .menu-list {
+    margin-top: var(--s-5);
+    border-top: var(--line) solid var(--rule);
+  }
+
+  .menu-list li {
+    border-bottom: var(--line) solid var(--rule);
+  }
+
+  .menu-list a {
+    display: flex;
+    align-items: baseline;
+    gap: var(--s-2);
+    padding-block: 0.9rem 0.7rem;
+  }
+
+
+  .menu-label {
+    font-size: clamp(3rem, 15vw, 5.5rem);
+    line-height: 0.9;
+    font-weight: 650;
+    font-stretch: 75%;
+    letter-spacing: -0.02em;
+  }
+
+  .menu-list a[aria-current] .menu-label {
+    color: var(--c-fuchsia);
+  }
+
+  .menu-foot {
+    margin-top: auto;
+    padding-top: var(--s-4);
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    text-transform: none;
+    letter-spacing: 0.01em;
+    color: var(--c-graphite-muted);
+  }
+
+  .muted-link:hover {
+    color: var(--c-paper);
+  }
+
+  /* Abertura / fechamento: painel desce do topo, links em sequência */
+  .menu[open] {
+    animation: menu-in var(--dur-2) var(--ease-out) both;
+  }
+
+  .menu[open] .menu-list li {
+    animation: menu-item var(--dur-3) var(--ease-out) both;
+    animation-delay: calc(80ms + var(--i) * 40ms);
+  }
+
+  .menu.is-closing {
+    animation: menu-out 220ms var(--ease-in-out) both;
+  }
+
+  @keyframes menu-in {
+    from {
+      transform: translateY(-100%);
+    }
+  }
+
+  @keyframes menu-out {
+    to {
+      transform: translateY(-100%);
+    }
+  }
+
+  @keyframes menu-item {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .menu[open],
+    .menu[open] .menu-list li,
+    .menu.is-closing {
+      animation: none;
+    }
+  }
+</style>

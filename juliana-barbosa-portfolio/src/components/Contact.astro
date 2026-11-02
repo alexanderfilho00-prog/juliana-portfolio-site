@@ -1,0 +1,130 @@
+---
+import { profile } from '../data/profile';
+const { contact } = profile;
+const year = new Date().getFullYear();
+
+const channels = [
+  { label: 'E-mail', text: contact.email, href: `mailto:${contact.email}`, external: false },
+  { label: 'LinkedIn', text: contact.linkedin.label, href: contact.linkedin.href, external: true },
+  { label: 'Telefone', text: contact.phone.label, href: contact.phone.href, external: false },
+];
+---
+
+<footer id="contato" class="contact wrap" data-theme="indigo" aria-labelledby="contato-h">
+  <div class="grid contact-head" data-reveal>
+    <h2 id="contato-h" class="body-col h2">Vamos conversar sobre marca?</h2>
+  </div>
+
+  <ul class="contact-list" data-reveal style="--reveal-delay:80ms">
+    {
+      channels.map((c) => (
+        <li class="grid contact-row">
+          <span class="margin-col micro contact-label" aria-hidden="true">
+            {c.label}
+          </span>
+          <a
+            class="body-col contact-link"
+            href={c.href}
+            target={c.external ? '_blank' : undefined}
+            rel={c.external ? 'noopener' : undefined}
+          >
+            <span class="visually-hidden">{c.label}: </span>
+            <span class="contact-text">{c.text}</span>
+            {c.external && <span class="visually-hidden"> (abre em nova aba)</span>}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+
+  <p class="contact-name" aria-hidden="true">Juliana Barbosa</p>
+
+  <div class="grid contact-foot micro">
+    <p class="foot-l">© {year} {profile.name}</p>
+    <a class="foot-r" href="#conteudo">Voltar ao topo <span class="arrow" aria-hidden="true">↑</span></a>
+  </div>
+</footer>
+
+<style>
+  .contact {
+    container-type: inline-size;
+    padding-block: var(--s-6) var(--s-3);
+  }
+
+  .contact-head .h2 {
+    max-width: 11ch;
+  }
+
+  .contact-list {
+    margin-top: var(--s-5);
+    border-top: var(--line) solid var(--rule);
+  }
+
+  .contact-row {
+    border-bottom: var(--line) solid var(--rule);
+    align-items: baseline;
+    row-gap: 0.1rem;
+    padding-top: 0.9rem;
+  }
+
+  .contact-label {
+    color: var(--muted);
+  }
+
+  .contact-link {
+    display: block;
+    padding-block: 0.2rem 0.75rem;
+    font-size: clamp(1.5rem, 0.7rem + 3.4vw, 3.75rem);
+    line-height: 1.05;
+    font-weight: 500;
+    font-stretch: 75%;
+    letter-spacing: -0.015em;
+    overflow-wrap: anywhere;
+    outline-offset: -2px;
+  }
+
+  .contact-text {
+    background: linear-gradient(var(--c-lime), var(--c-lime)) 0 100% / 0% 0.07em no-repeat;
+    transition: background-size var(--dur-2) var(--ease-out);
+    padding-bottom: 0.04em;
+  }
+
+  .contact-link:hover .contact-text,
+  .contact-link:focus-visible .contact-text {
+    background-size: 100% 0.07em;
+  }
+
+  /* Fechamento: o nome volta de margem a margem */
+  .contact-name {
+    margin-top: var(--s-6);
+    font-family: var(--f-display);
+    font-size: calc(100cqi / 7.35);
+    line-height: 0.82;
+    font-weight: 700;
+    letter-spacing: var(--track-display);
+    font-synthesis: none;
+    white-space: nowrap;
+  }
+
+  .contact-foot {
+    margin-top: var(--s-3);
+    color: var(--muted);
+  }
+
+  .foot-l {
+    grid-column: 1 / span 6;
+  }
+
+  .foot-r {
+    grid-column: 7 / -1;
+    justify-self: end;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    margin-block: -0.75rem;
+  }
+
+  .foot-r:hover {
+    color: var(--fg);
+  }
+</style>

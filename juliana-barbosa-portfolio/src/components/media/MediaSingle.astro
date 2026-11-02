@@ -1,0 +1,18 @@
+---
+import type { Media, Swatch } from '../../data/projects';
+import { hasSrc } from '../../data/projects';
+import MediaFrame from './MediaFrame.astro';
+interface Props { media: Media; swatch: Swatch; label: string; }
+const { media, swatch, label } = Astro.props;
+---
+{hasSrc(media) && (
+  <figure class="m-single" data-reveal>
+    <MediaFrame media={media} swatch={swatch} label={label} />
+    {media.caption && <figcaption class="micro muted">{media.caption}</figcaption>}
+  </figure>
+)}
+<style>
+  .m-single { grid-column: 1 / -1; }
+  @media (min-width: 900px) { .m-single { grid-column: 4 / -1; } }
+  figcaption { margin-top: 0.6rem; }
+</style>
